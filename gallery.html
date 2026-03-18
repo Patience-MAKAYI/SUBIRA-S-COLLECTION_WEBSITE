@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery - Subira's Collection</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+.slideshow-container {
+    position: relative;
+    max-width: 600px;
+    margin: auto;
+}
+
+.slides {
+    display: none;
+}
+
+.slides img {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: auto;
+    border-radius: 12px;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 12px;
+    color: white;
+    font-size: 18px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Subira's Collection</h1>
+<p>Elegant Clip-On Earrings & Pocket Perfumes for Every Occasion</p>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="earrings.html">Clip-On Earrings</a>
+<a href="perfumes.html">Pocket Perfumes</a>
+<a href="gallery.html">Gallery</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<section>
+<h2>Product Gallery</h2>
+
+<div class="slideshow-container">
+
+<div class="slides"><img src="images/Earrings1.jpeg"></div>
+<div class="slides"><img src="images/Earrings2.jpeg"></div>
+<div class="slides"><img src="images/Earrings3.jpeg"></div>
+<div class="slides"><img src="images/Earrings4.jpeg"></div>
+
+<div class="slides"><img src="images/Perfume1.jpeg"></div>
+<div class="slides"><img src="images/Perfume2.jpeg"></div>
+<div class="slides"><img src="images/Perfume3.jpeg"></div>
+<div class="slides"><img src="images/Perfume4.jpeg"></div>
+
+<a class="prev" onclick="plusSlides(-1)">❮</a>
+<a class="next" onclick="plusSlides(1)">❯</a>
+
+</div>
+</section>
+
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function showSlides(n) {
+  let slides = document.getElementsByClassName("slides");
+
+  if (n > slides.length) slideIndex = 1;
+  if (n < 1) slideIndex = slides.length;
+
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+
+  slides[slideIndex - 1].style.display = "block";
+}
+</script>
+
+<footer>
+<p>© 2026 Subira's Collection</p>
+</footer>
+
+</body>
+</html>

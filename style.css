@@ -1,0 +1,141 @@
+/* ---------------------- */
+/* Import Fancy Font */
+/* ---------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+/* ---------------------- */
+/* General Styles */
+/* ---------------------- */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffe6dc;
+    color: #333;
+}
+
+h1, h2, h3 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ---------------------- */
+/* Header */
+/* ---------------------- */
+header {
+    background: #f4c6b4;
+    text-align: center;
+    padding: 25px 0;
+}
+
+header h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3em;
+    color: #b76e79;
+}
+
+header p {
+    font-size: 1.1em;
+}
+
+/* ---------------------- */
+/* Navigation */
+/* ---------------------- */
+nav {
+    background: #f0b8a4;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: white;
+}
+
+/* ---------------------- */
+/* Hero */
+/* ---------------------- */
+.hero {
+    background: url('images/HeroImage.jpeg') no-repeat center;
+    background-size: cover;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+/* ---------------------- */
+/* Sections */
+/* ---------------------- */
+section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* ---------------------- */
+/* Products */
+/* ---------------------- */
+.products {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.product {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    max-width: 220px;
+}
+
+.product img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* ---------------------- */
+/* Gallery Center Fix */
+/* ---------------------- */
+.slideshow-container {
+    max-width: 600px;
+    margin: 30px auto;
+    text-align: center;
+}
+
+.slides {
+    display: none;
+}
+
+.slides img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    display: block;
+    margin: auto;
+}
+
+/* ---------------------- */
+/* Video Size Fix */
+/* ---------------------- */
+section video {
+    width: 60%;
+    max-width: 400px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 12px;
+}
+
+/* ---------------------- */
+/* Footer */
+/* ---------------------- */
+footer {
+    background: #f4c6b4;
+    text-align: center;
+    padding: 15px;
+}
