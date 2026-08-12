@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard - Subira's Collection</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f8e8e0;
+}
+
+header{
+    background:#b76e79;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.logout-btn{
+    float:right;
+    margin:20px;
+    background:#333;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.logout-btn:hover{
+    background:#555;
+}
+
+.admin-container{
+    max-width:1200px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+h2{
+    color:#b76e79;
+    margin-bottom:15px;
+}
+
+.stats{
+    display:flex;
+    gap:20px;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-bottom:40px;
+}
+
+.card{
+    flex:1;
+    min-width:220px;
+    background:#f4c6b4;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
+}
+
+.card h3{
+    font-size:40px;
+    color:#b76e79;
+}
+
+.card p{
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.form-section input,
+.form-section select{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+.add-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#b76e79;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.add-btn:hover{
+    background:#a85d69;
+}
+
+#message{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table th{
+    background:#b76e79;
+    color:white;
+    padding:12px;
+}
+
+table td{
+    border-bottom:1px solid #eee;
+    padding:12px;
+    text-align:center;
+}
+
+table tr:hover{
+    background:#fff5f3;
+}
+
+.edit-btn{
+    background:#198754;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+.delete-btn{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.edit-btn:hover{
+    background:#157347;
+}
+
+.delete-btn:hover{
+    background:#bb2d3b;
+}
+
+hr{
+    margin:40px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Subira's Collection</h1>
+
+<p>Business Management Dashboard</p>
+
+</header>
+
+<button class="logout-btn" onclick="logout()">
+
+Logout
+
+</button>
+
+<div class="admin-container">
+
+<h2>Dashboard Overview</h2>
+
+<div class="stats">
+
+<div class="card">
+<h3 id="totalProducts">0</h3>
+<p>Total Products</p>
+</div>
+
+<div class="card">
+<h3 id="totalEarrings">0</h3>
+<p>Earrings</p>
+</div>
+
+<div class="card">
+<h3 id="totalPerfumes">0</h3>
+<p>Perfumes</p>
+</div>
+
+</div>
+
+<hr>
+
+<div class="form-section">
+
+<h2>Add Product</h2>
+
+<input
+type="text"
+id="name"
+placeholder="Product Name">
+
+<input
+type="number"
+id="price"
+placeholder="Price">
+
+<input
+type="number"
+id="stock"
+placeholder="Stock Quantity">
+
+<input
+type="text"
+id="image"
+placeholder="Image Filename">
+
+<select id="category">
+
+<option value="earrings">
+Earrings
+</option>
+
+<option value="perfumes">
+Perfumes
+</option>
+
+</select>
+
+<button
+class="add-btn"
+onclick="addProduct()">
+
+Add Product
+
+</button>
+
+<p id="message"></p>
+
+</div>
+
+<hr>
+
+<h2>Manage Products</h2>
+
+<table id="productsTable">
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Category</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<hr>
+
+<h2>Customer Orders</h2>
+
+<table id="ordersTable">
+
+<thead>
+
+<tr>
+
+<th>Customer</th>
+<th>Phone</th>
+<th>Product</th>
+<th>Quantity</th>
+<th>Address</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<script type="module">
+    import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyB_NHnimxCj3KSk3oUHS4xcyyYGqJ2x9dA",
+    authDomain: "subira-s-collection.firebaseapp.com",
+    projectId: "subira-s-collection",
+    storageBucket: "subira-s-collection.firebasestorage.app",
+    messagingSenderId: "1059752058697",
+    appId: "1:1059752058697:web:d47b6563de3e664a324498"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+onAuthStateChanged(auth,(user)=>{
+
+    if(!user){
+
+        window.location.href="login.html";
+
+    }
+
+});
+
+window.logout = async function(){
+
+    await signOut(auth);
+
+    window.location.href="login.html";
+
+};
+
+async function loadProducts(){
+
+    const tableBody =
+    document.querySelector("#productsTable tbody");
+
+    tableBody.innerHTML = "";
+
+    let totalProducts = 0;
+    let totalEarrings = 0;
+    let totalPerfumes = 0;
+
+    const querySnapshot =
+    await getDocs(collection(db,"products"));
+
+    querySnapshot.forEach((document)=>{
+
+        const product = document.data();
+
+        totalProducts++;
+
+        if(product.category==="earrings"){
+            totalEarrings++;
+        }
+
+        if(product.category==="perfumes"){
+            totalPerfumes++;
+        }
+
+        tableBody.innerHTML += `
+
+        <tr>
+
+        <td>${product.name}</td>
+
+        <td>K${product.price}</td>
+
+        <td>${product.stock}</td>
+
+        <td>${product.category}</td>
+
+        <td>
+
+        <button
+        class="edit-btn"
+        onclick="editProduct(
+        '${document.id}',
+        '${product.name}',
+        ${product.price},
+        ${product.stock},
+        '${product.category}'
+        )">
+
+        Edit
+
+        </button>
+
+        <button
+        class="delete-btn"
+        onclick="deleteProduct('${document.id}')">
+
+        Delete
+
+        </button>
+
+        </td>
+
+        </tr>
+
+        `;
+
+    });
+
+    document.getElementById("totalProducts").innerHTML =
+    totalProducts;
+
+    document.getElementById("totalEarrings").innerHTML =
+    totalEarrings;
+
+    document.getElementById("totalPerfumes").innerHTML =
+    totalPerfumes;
+
+}
+window.editProduct = async function(
+id,
+oldName,
+oldPrice,
+oldStock,
+oldCategory
+){
+
+    const newName =
+    prompt("Product Name:", oldName);
+
+    if(newName===null) return;
+
+    const newPrice =
+    prompt("Price:", oldPrice);
+
+    if(newPrice===null) return;
+
+    const newStock =
+    prompt("Stock:", oldStock);
+
+    if(newStock===null) return;
+
+    const newCategory =
+    prompt(
+        "Category (earrings/perfumes):",
+        oldCategory
+    );
+
+    if(newCategory===null) return;
+
+    try{
+
+        await updateDoc(
+            doc(db,"products",id),
+            {
+
+                name:newName,
+                price:Number(newPrice),
+                stock:Number(newStock),
+                category:newCategory
+
+            }
+        );
+
+        alert("✅ Product updated successfully!");
+
+        loadProducts();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("❌ Error updating product.");
+
+    }
+
+};
+
+window.deleteProduct = async function(id){
+
+    const answer =
+    confirm("Delete this product?");
+
+    if(!answer){
+        return;
+    }
+
+    try{
+
+        await deleteDoc(
+            doc(db,"products",id)
+        );
+
+        alert("✅ Product deleted successfully!");
+
+        loadProducts();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("❌ Error deleting product.");
+
+    }
+
+};
+
+window.addProduct = async function(){
+
+    const name =
+    document.getElementById("name").value;
+
+    const price =
+    Number(document.getElementById("price").value);
+
+    const stock =
+    Number(document.getElementById("stock").value);
+
+    const image =
+    document.getElementById("image").value;
+
+    const category =
+    document.getElementById("category").value;
+
+    try{
+
+        await addDoc(collection(db,"products"),{
+
+            name:name,
+            price:price,
+            stock:stock,
+            image:image,
+            category:category
+
+        });
+
+        document.getElementById("message").innerHTML =
+        "✅ Product added successfully!";
+
+        document.getElementById("name").value="";
+        document.getElementById("price").value="";
+        document.getElementById("stock").value="";
+        document.getElementById("image").value="";
+        document.getElementById("category").value="earrings";
+
+        loadProducts();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("message").innerHTML =
+        "❌ Error adding product.";
+
+    }
+
+};
+
+async function loadOrders(){
+
+    const tableBody =
+    document.querySelector("#ordersTable tbody");
+
+    tableBody.innerHTML="";
+
+    try{
+
+        const querySnapshot =
+        await getDocs(collection(db,"orders"));
+
+        querySnapshot.forEach((document)=>{
+
+            const order =
+            document.data();
+
+            tableBody.innerHTML += `
+
+            <tr>
+
+            <td>${order.customerName}</td>
+
+            <td>${order.phone}</td>
+
+            <td>${order.product}</td>
+
+            <td>${order.quantity}</td>
+
+            <td>${order.address}</td>
+<td>
+
+<select onchange="changeStatus('${document.id}', this.value)">
+
+<option value="Pending" ${order.status=="Pending"?"selected":""}>
+Pending
+</option>
+
+<option value="Processing" ${order.status=="Processing"?"selected":""}>
+Processing
+</option>
+
+<option value="Delivered" ${order.status=="Delivered"?"selected":""}>
+Delivered
+</option>
+
+</select>
+
+</td>
+            
+
+            </tr>
+
+            `;
+
+        });
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("❌ Error loading customer orders.");
+
+    }
+
+}
+// =========================
+// Start Dashboard
+// =========================
+window.changeStatus = async function(id, newStatus){
+
+    try{
+
+        await updateDoc(
+            doc(db, "orders", id),
+            {
+                status: newStatus
+            }
+        );
+
+        alert("✅ Order status updated successfully!");
+
+        loadOrders();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("❌ Error updating order status.");
+
+    }
+
+}
+loadProducts();
+loadOrders();
+
+</script>
+
+</body>
+
+</html>

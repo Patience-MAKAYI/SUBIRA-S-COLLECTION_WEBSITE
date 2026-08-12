@@ -3,182 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Subira's Collection</title>
+
 <link rel="stylesheet" href="style.css">
 
 <style>
 
-/* Smooth hover */
-.product img {
-  transition: transform 0.3s ease;
+.loading{
+    text-align:center;
+    padding:30px;
+    font-size:18px;
 }
 
-.product img:hover {
-  transform: scale(1.08);
-}
-
-/* Modal Image Zoom */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  padding-top: 60px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
-}
-
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 60%;
-  max-width: 500px;
-  border-radius: 10px;
-}
-
-.close {
-  position: absolute;
-  top: 20px;
-  right: 35px;
-  color: white;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-/* Video size */
-video {
-  display: block;
-  margin: 20px auto;
-  width: 50%;
-  max-width: 350px;
-  border-radius: 12px;
+.error{
+    text-align:center;
+    color:red;
+    padding:20px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <header>
 <h1>Subira's Collection</h1>
-<p>Elegant Clip-On Earrings & Pocket Perfumes for Every Occasion</p>
+<p>Elegant Clip-On Earrings & Pocket Perfumes</p>
 </header>
 
 <nav>
 <a href="index.html">Home</a>
-<a href="earrings.html">Clip-On Earrings</a>
-<a href="perfumes.html">Pocket Perfumes</a>
+<a href="earrings.html">Earrings</a>
+<a href="perfumes.html">Perfumes</a>
 <a href="gallery.html">Gallery</a>
-<a href="about.html">About</a>
 <a href="contact.html">Contact</a>
 </nav>
 
 <div class="hero">
 <h2>Welcome to Subira's Collection</h2>
-<p>Elegant Clip-On Earrings & Pocket Perfumes for Every Occasion</p>
-<a href="#products" class="button">Shop Now</a>
+<p>Elegant accessories for every occasion</p>
+<a href="#products" class="btn">Shop Now</a>
 </div>
 
 <section>
-<h2>About Our Brand</h2>
+<h2>About Us</h2>
+
 <p>
-Subira's Collection offers stylish clip-on earrings for people who prefer non-pierced jewelry,
-along with pocket perfumes that are easy to carry and perfect for everyday freshness.
+We sell stylish clip-on earrings and pocket perfumes
+designed for elegance, convenience and everyday use.
 </p>
+
 </section>
 
 <section id="products">
+
 <h2>Featured Products</h2>
 
-<p style="text-align:center; font-size:14px; color:#555;">
-Click any image to view it in full size.
-</p>
+<div id="products-container" class="products">
 
-<div class="products">
-
-<div class="product">
-<img src="images/Earrings1.jpeg" alt="Elegant clip-on earrings">
-<p>Stylish Earrings</p>
-</div>
-
-<div class="product">
-<img src="images/Earrings2.jpeg" alt="Fashion clip-on earrings">
-<p>Stylish Earrings</p>
-</div>
-
-<div class="product">
-<img src="images/Earrings3.jpeg" alt="Modern clip-on earrings">
-<p>Stylish Earrings</p>
-</div>
-
-<div class="product">
-<img src="images/Perfume1.jpeg" alt="Pocket perfume fragrance">
-<p>Pocket Perfume</p>
-</div>
-
-<div class="product">
-<img src="images/Perfume2.jpeg" alt="Travel size perfume">
-<p>Pocket Perfume</p>
-</div>
-
-<div class="product">
-<img src="images/Perfume3.jpeg" alt="Mini perfume bottle">
-<p>Pocket Perfume</p>
+<div class="loading">
+Loading products...
 </div>
 
 </div>
-</section>
-
-<section>
-<h2>Product Video</h2>
-
-<video controls>
-  <source src="video/PerfumeVideo.mp4" type="video/mp4">
-</video>
-
-<p>Watch our pocket perfumes in action!</p>
-</section>
-
-<section>
-<h2>Welcome Audio</h2>
-
-<audio controls>
-  <source src="audio/audio.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-
-<p>Click play to hear our brand introduction.</p>
 
 </section>
-
-<!-- Image Modal -->
-<div id="imageModal" class="modal">
-  <span class="close">&times;</span>
-  <img class="modal-content" id="modalImg">
-</div>
 
 <footer>
 <p>© 2026 Subira's Collection</p>
 </footer>
 
-<script>
-const images = document.querySelectorAll(".product img");
-const modal = document.getElementById("imageModal");
-const modalImg = document.getElementById("modalImg");
-const closeBtn = document.querySelector(".close");
+<script type="module">
 
-images.forEach(img => {
-  img.onclick = function(){
-    modal.style.display = "block";
-    modalImg.src = this.src;
-  }
-});
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 
-closeBtn.onclick = function() {
-  modal.style.display = "none";
+import {
+    getFirestore,
+    collection,
+    getDocs
 }
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB_NHnimxCj3KSk3oUHS4xcyyYGqJ2x9dA",
+  authDomain: "subira-s-collection.firebaseapp.com",
+  projectId: "subira-s-collection",
+  storageBucket: "subira-s-collection.firebasestorage.app",
+  messagingSenderId: "1059752058697",
+  appId: "1:1059752058697:web:d47b6563de3e664a324498"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function loadProducts() {
+
+    const container =
+    document.getElementById("products-container");
+
+    try {
+
+        container.innerHTML = "";
+
+        const snapshot =
+        await getDocs(collection(db, "products"));
+
+        snapshot.forEach((doc) => {
+
+            const product = doc.data();
+
+            container.innerHTML += `
+
+            <div class="product">
+
+                <img src="images/${product.image}"
+                     alt="${product.name}">
+
+                <h3>${product.name}</h3>
+
+                <p><strong>K${product.price}</strong></p>
+
+                <p>Stock: ${product.stock}</p>
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        container.innerHTML = `
+        <div class="error">
+        Unable to load products.
+        </div>
+        `;
+    }
+
+}
+
+loadProducts();
+
 </script>
 
 </body>
